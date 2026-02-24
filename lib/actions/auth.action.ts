@@ -102,12 +102,12 @@ export async function signOut() {
 // Get current user from session cookie
 export async function getCurrentUser(): Promise<User | null> {
   const cookieStore = await cookies();
-  const { auth, db } = getFirebaseAdmin();
 
   const sessionCookie = cookieStore.get("session")?.value;
   if (!sessionCookie) return null;
 
   try {
+    const { auth, db } = getFirebaseAdmin();
     const decodedClaims = await auth.verifySessionCookie(sessionCookie, true);
 
     // get user info from db

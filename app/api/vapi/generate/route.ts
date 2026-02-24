@@ -5,6 +5,8 @@ import { z } from "zod";
 import { getFirebaseAdmin } from "@/firebase/admin";
 import { getRandomInterviewCover } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+
 const generateInterviewSchema = z.object({
   type: z.enum(["behavioural", "technical", "mixed"]),
   role: z.string().trim().min(2).max(120),
