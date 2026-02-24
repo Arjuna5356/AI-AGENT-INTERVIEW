@@ -2,7 +2,7 @@ import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
 import { z } from "zod";
 
-import { auth, db } from "@/firebase/admin";
+import { getFirebaseAdmin } from "@/firebase/admin";
 import { getRandomInterviewCover } from "@/lib/utils";
 
 const generateInterviewSchema = z.object({
@@ -42,6 +42,7 @@ const parseQuestions = (questions: string) => {
 
 export async function POST(request: Request) {
   try {
+    const { auth, db } = getFirebaseAdmin();
     const body = await request.json();
     const parsedBody = generateInterviewSchema.safeParse(body);
 

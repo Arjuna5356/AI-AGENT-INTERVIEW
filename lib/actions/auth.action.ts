@@ -1,6 +1,6 @@
 "use server";
 
-import { auth, db } from "@/firebase/admin";
+import { getFirebaseAdmin } from "@/firebase/admin";
 import { cookies } from "next/headers";
 
 // Session duration (1 week)
@@ -9,6 +9,7 @@ const SESSION_DURATION = 60 * 60 * 24 * 7;
 // Set session cookie
 export async function setSessionCookie(idToken: string) {
   const cookieStore = await cookies();
+  const { auth } = getFirebaseAdmin();
 
   // Create session cookie
   const sessionCookie = await auth.createSessionCookie(idToken, {
@@ -27,6 +28,7 @@ export async function setSessionCookie(idToken: string) {
 
 export async function signUp(params: SignUpParams) {
   const { uid, name, email } = params;
+  const { db } = getFirebaseAdmin();
 
   try {
     // check if user exists in db
@@ -69,6 +71,7 @@ export async function signUp(params: SignUpParams) {
 
 export async function signIn(params: SignInParams) {
   const { email, idToken } = params;
+  const { auth } = getFirebaseAdmin();
 
   try {
     const userRecord = await auth.getUserByEmail(email);
@@ -99,6 +102,7 @@ export async function signOut() {
 // Get current user from session cookie
 export async function getCurrentUser(): Promise<User | null> {
   const cookieStore = await cookies();
+  const { auth, db } = getFirebaseAdmin();
 
   const sessionCookie = cookieStore.get("session")?.value;
   if (!sessionCookie) return null;
